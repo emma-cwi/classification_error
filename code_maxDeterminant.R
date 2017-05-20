@@ -1,5 +1,4 @@
-library(data.table)
-library(MASS)
+source("code_biasCorrection.R")
 
 test.det.var <- function(dataset="Data/5_wave.csv", target_nx.=c(1092,753,455), test_nx.=c(50,50,50), nTest=1000, nTarget=100){
   data <- read.csv(dataset)
@@ -20,7 +19,7 @@ test.det.var <- function(dataset="Data/5_wave.csv", target_nx.=c(1092,753,455), 
   }
   
   # Init Result
-  test_matrix <- target_matrix <- var_nxy <- var_nx. <- det_perle <- det_rtp <- c()
+  test_matrix <- target_matrix <- var_nxy <- var_nx. <- det_misclass <- det_rtp <- c()
   
   ### Iterate Test Set
   for(i in 1:nTest){
@@ -45,18 +44,18 @@ test.det.var <- function(dataset="Data/5_wave.csv", target_nx.=c(1092,753,455), 
     test_matrix_temp <- matrix(test_matrix_temp, ncol=nClass, nrow=nClass)
     
     # Make Matrix Determinant
-    det_perle_temp <- det(perle.rate(test_matrix_temp))
+    det_misclass_temp <- det(misclass.rate(test_matrix_temp))
     det_rtp_temp <- det(rtp.rate(test_matrix_temp))
-    det_perle <- c(det_perle, det_perle_temp)
+    det_misclass <- c(det_misclass, det_misclass_temp)
     det_rtp <- c(det_rtp, det_rtp_temp)
     
-    if(det_perle_temp == 0 | det_rtp_temp == 0){
+    if(det_misclass_temp == 0 | det_rtp_temp == 0){
       print("Determinant == 0")
       next
     }
     
     ### Iterate Target Set
-    perle_nxy <- perle_nx. <- c()
+    misclass_nxy <- misclass_nx. <- c()
     for(k in 1:nTarget){
       
       ### Sample Target Data
@@ -83,23 +82,23 @@ test.det.var <- function(dataset="Data/5_wave.csv", target_nx.=c(1092,753,455), 
       target_n.y <- rowSums(target_matrix_temp) 
       
       ### Get Results
-      perle_nxy <- rbind(perle_nxy, as.vector( perle.all(test_matrix_temp, target_n.y)) ) 
-      perle_nx. <- rbind(perle_nx., perle(test_matrix_temp, target_n.y))
+      misclass_nxy <- rbind(misclass_nxy, as.vector( misclass.nxy(test_matrix_temp, target_n.y)) ) 
+      misclass_nx. <- rbind(misclass_nx., misclass.nx.(test_matrix_temp, target_n.y))
     }
     
     ### Get Variance
-    var_nxy <- rbind(var_nxy, colVar(perle_nxy))
-    var_nx. <- rbind(var_nx., colVar(perle_nx.))
+    var_nxy <- rbind(var_nxy, colVar(misclass_nxy))
+    var_nx. <- rbind(var_nx., colVar(misclass_nx.))
   }
   
-  res_nxy <- cbind(det_perle, det_rtp, var_nxy)
-  colnames(res_nxy) <- c("Det.PERLE", "Det.RTP", colnames_nxy)
+  res_nxy <- cbind(det_misclass, det_rtp, var_nxy)
+  colnames(res_nxy) <- c("Det.Misclass", "Det.RTP", colnames_nxy)
   
-  res_nx. <- cbind(det_perle, det_rtp, var_nx.)
-  colnames(res_nx.) <- c("Det.PERLE", "Det.RTP", colnames_nx.)
+  res_nx. <- cbind(det_misclass, det_rtp, var_nx.)
+  colnames(res_nx.) <- c("Det.Misclass", "Det.RTP", colnames_nx.)
   
-  res_sum <- cbind(det_perle, det_rtp, rowSums(var_nx.), rowSums(var_nxy)) 
-  colnames(res_sum) <- c("Det.PERLE", "Det.RTP", "Sum.Var.nx.", "Sum.Var.nxy")
+  res_sum <- cbind(det_misclass, det_rtp, rowSums(var_nx.), rowSums(var_nxy)) 
+  colnames(res_sum) <- c("Det.Misclass", "Det.RTP", "Sum.Var.nx.", "Sum.Var.nxy")
   
   colnames(test_matrix) <- colnames_nxy
   colnames(target_matrix) <- c("Iteration", colnames_nxy)
@@ -126,9 +125,9 @@ res_varplot <- function(res, name=deparse(substitute(res))){
 }
 
 res_cordet <- function(res){
-  print("PERLE: nx. - nxy")
+  print("Correlation Misclass Determinant and Var(nx.), Var(nxy)")
   print( c(cor(res$res_sum[,c(1,3)])[2,1] , cor(res$res_sum[,c(1,4)])[2,1] ) )
-  print("RTP: nx. - nxy")
+  print("Correlation RTP Determinant and Var(nx.), Var(nxy)")
   print( c( cor(res$res_sum[,c(2,3)])[2,1] , cor(res$res_sum[,c(2,4)])[2,1] ) )
 }
 
