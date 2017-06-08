@@ -7,7 +7,7 @@ misclass.rate <- function(confusion_matrix){
   return( t( t(confusion_matrix)/colSums(confusion_matrix) ) )
 }
 misclass.nx. <- function(confusion_matrix, target_n.y){
-  return(as.vector( round( solve(misclass.rate(confusion_matrix)) %*% as.matrix(target_n.y) ) ))
+  return(as.vector( solve(misclass.rate(confusion_matrix)) %*% as.matrix(target_n.y) ))
 }
 misclass.nxy <- function(confusion_matrix, target_n.y){
   return(round( t( t(misclass.rate(confusion_matrix))*misclass.nx.(confusion_matrix, target_n.y)) ))
