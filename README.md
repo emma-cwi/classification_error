@@ -1,3 +1,9 @@
+Since R code implement the bias correction methods, Ratio-to-TP method, Sample-to-Sample method, and Maximum Determinant methods introduced in the following paper: 
+
+E. Beauxis-Aussalet and L. Hardman, Extended Methods to Handle Classification Biases, 2017. IEEE conference on Data Science and Advanced Analytics (DSAA). 
+
+Author copy is included in root folder.
+
 ######### BASIC FUNCTIONS
 code_biasCorrection.R
 Bias correction methods: misclassificatino method, reclassification method, Ratio-to-TP method
