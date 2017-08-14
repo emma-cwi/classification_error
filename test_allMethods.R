@@ -1,7 +1,7 @@
 ################# TEST BIAS CORRECTION #################
-source("code_biasCorrection.R")
+source("code_testBiasCorrection.R")
 
-### Test 0
+### TEST DATA
 res_1_iris <- test.real.data(dataset="Data/1_iris.csv", target_nx.=c(25,30,20), nTest=10000)
 res_2_iono <- test.real.data(dataset="Data/2_ionosphere.csv", target_nx.=c(63,75), nTest=10000)
 res_3_segment <- test.real.data(dataset="Data/3_segment.csv", target_nx.=c(120,220,120,220,120,220,120), nTest=10000)
@@ -9,6 +9,7 @@ res_4_ohscal <- test.real.data(dataset="Data/4_ohscal.csv", target_nx.=rep(400,1
 res_5_wave <- test.real.data(dataset="Data/5_wave.csv", target_nx.=c(1092,753,455), nTest=10000)
 res_6_chess <- test.real.data(dataset="Data/6_chess.csv", target_nx.=c(669,1027), nTest=10000)
 
+#### PLOT AND SAVE TEST RESULTS
 res_boxplot(res_1_iris)
 res_boxplot_error(res_1_iris)
 res_boxplot(res_2_iono)
@@ -21,6 +22,8 @@ res_boxplot(res_5_wave)
 res_boxplot_error(res_5_wave)
 res_boxplot(res_6_chess)
 res_boxplot_error(res_6_chess)
+
+dir.create('Result_Real')
 
 saveRDS(res_1_iris, "Result_Real/res_1_iris.RDS")
 saveRDS(res_2_iono, "Result_Real/res_2_iono.RDS")
@@ -35,10 +38,13 @@ res_3_segment <- readRDS("Result_Real/res_3_segment.RDS")
 res_4_ohscal <- readRDS("Result_Real/res_4_ohscal.RDS")
 res_5_wave <- readRDS("Result_Real/res_5_wave.RDS")
 res_6_chess <- readRDS("Result_Real/res_6_chess.RDS")
+################# END - TEST BIAS CORRECTION #################
 
-################# TEST DETERMINANT ################# 
-source("code_maxDeterminant.R")
 
+################# TEST MAXIMUM DETERMINANT ################# 
+source("code_testMaxDeterminant.R")
+
+############ TEST CONDITIONS
 ### Test 1
 det_1_iris <- test.det.var(dataset="Data/1_iris.csv", target_nx.=c(20,20,15), test_nx.=c(25,25,25))
 det_2_iono <- test.det.var(dataset="Data/2_ionosphere.csv", target_nx.=c(50,50), test_nx.=c(50,100))
@@ -63,6 +69,7 @@ det_4_ohscal <- test.det.var(dataset="Data/4_ohscal.csv", test_nx.=rep(200,10), 
 det_5_wave <- test.det.var(dataset="Data/5_wave.csv", test_nx.=rep(200,3), target_nx.=c(300,600,900))
 det_6_chess <- test.det.var(dataset="Data/6_chess.csv", test_nx.=c(200,300), target_nx.=c(1000,500))
 
+############ PLOT/SAVE TEST RESULTS
 res_varplot(det_1_iris)
 res_varplot(det_2_iono)
 res_varplot(det_3_segment)
@@ -77,6 +84,8 @@ res_cordet(det_4_ohscal)
 res_cordet(det_5_wave)
 res_cordet(det_6_chess)
 
+dir.create('Result_Det')
+
 saveRDS(det_1_iris, "Result_Det/det_1_iris.RDS")
 saveRDS(det_2_iono, "Result_Det/det_2_iono.RDS")
 saveRDS(det_3_segment, "Result_Det/det_3_segment.RDS")
@@ -90,4 +99,21 @@ det_3_segment <- readRDS("Result_Det/det_3_segment.RDS")
 det_4_ohscal <- readRDS("Result_Det/det_4_ohscal.RDS")
 det_5_wave <- readRDS("Result_Det/det_5_wave.RDS")
 det_6_chess <- readRDS("Result_Det/det_6_chess.RDS")
+################# END - TEST MAXIMUM DETERMINANT #################
+
+################# TEST SAMPLE TO SAMPLE ################# 
+source("code_testFieller.R")
+source("code_testVarNxy.R")
+
+############ VARIANCE OF CLASS SIZE Nx. 
+# TO DO
+
+############ VARIANCE OF ERROR COMPOSITION Nxy
+# TO DO
+
+############ REPRODUCTION OF PRIOR WORK FROM Shieh 2009, Buonaccorsi 2010
+# TO DO
+
+################# END - TEST SAMPLE TO SAMPLE ################# 
+
 
