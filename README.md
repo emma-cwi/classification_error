@@ -4,7 +4,9 @@ E. Beauxis-Aussalet and L. Hardman, Extended Methods to Handle Classification Bi
 
 Author copy is included in root folder.
 
+
 ######### BASIC FUNCTIONS
+
 code_biasCorrection.R
 Bias correction methods: misclassificatino method, reclassification method, Ratio-to-TP method
 
@@ -14,6 +16,7 @@ Functions to apply Fieller's interval to estimates of 1) class size nx., 2) deta
 
 
 ######### TEST FUNCTIONS
+
 test_allMethods.R
 For set of tests as in Beauxis-Aussalet 2017
 
@@ -28,6 +31,7 @@ Tests for Maximum Determinant method.
 
 
 ######### DEFINITION OF COMMON VARIABLES
+
 test_n0., test_n1.
 True class size in test set (for class 0 and 1, respectively).
 
